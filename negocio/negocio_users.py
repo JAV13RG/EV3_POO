@@ -3,7 +3,9 @@ import requests
 from servicios import get_users_api, post_user_api, put_user_api, delete_user_api
 from modelos import User
 from datos import insertar_objeto, obtener_listado_objetos, obtener_user_name
-from negocio import crear_geolocalizacion, crear_direccion, crear_compania
+from negocio.negocio_geos import crear_geolocalizacion
+from negocio.negocio_addresses import crear_direccion
+from negocio.negocio_companies import crear_compania
 
 
 def obtener_users_api():

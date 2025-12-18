@@ -1,7 +1,5 @@
-from negocio import registrar_usuario, iniciar_sesion
+from negocio.negocio_usuario import registrar_usuario, iniciar_sesion
 from interfaces_usuario import menu_inicial
-from auxiliares import validar_correo
-from servicios.serper import busqueda
 # obtener_data_usuarios_api(url_usuarios)
 # listado_usuarios_db()
 # crear_user_api(url_usuarios)
@@ -10,31 +8,24 @@ from servicios.serper import busqueda
 # listado_publicaciones()
 # registrar_usuario()
 
-
 def app():
     while True:
-        menu_inicial()
+        opcion = menu_inicial()
 
-        opcion_inicial = input('Seleccione su opción [0-2]: ')
-        if opcion_inicial == '1':
+        if opcion == 1:
             registrar_usuario()
-        elif opcion_inicial == '2':
-            inicio_sesion = iniciar_sesion()
-            if inicio_sesion == True:
-                print('Iniciando Sistema...')
-        elif opcion_inicial == '3':
-            # ingreso_email = input('Ingrese Correo Electrónico: ')
-            # respuesta = validar_correo(ingreso_email)
-            # if respuesta == True:
-            #     print('Correo Válido.')
-            # else:
-            #     print('Correo Inválido.')
-            busqueda()
-        elif opcion_inicial == '0':
-            print('Saliendo...')
+
+        elif opcion == 2:
+            ok = iniciar_sesion()
+            if ok:
+                print("Iniciando sistema...")
+
+        elif opcion == 3:
+            print("Sección pruebas (API/CRUD) ...")
+
+        elif opcion == 0:
+            print("Saliendo...")
             break
-        else:
-            print('Opción Incorrecta, vuelva a intentar...')
 
-
-app()
+if __name__ == "__main__":
+    app()

@@ -1,30 +1,30 @@
-from datos.conexion import sesion
-from sqlalchemy import func
+from datos.conexion import get_session
 from modelos import Company, User, Usuario
 
-
-def obtener_listado_objetos(objeto):
-    listado_objetos = sesion.query(objeto).all()
-    if len(listado_objetos) > 0:
-        return listado_objetos
-
+def obtener_listado_objetos(modelo):
+    sesion = get_session()
+    try:
+        return sesion.query(modelo).all()
+    finally:
+        sesion.close()
 
 def obtener_user_name(valor):
-    user_identificado = sesion.query(User).filter(
-        User.name.like(f'%{valor}%')).first()
-    if user_identificado != None and isinstance(user_identificado, User):
-        return user_identificado
-
+    sesion = get_session()
+    try:
+        return sesion.query(User).filter(User.name.like(f"%{valor}%")).first()
+    finally:
+        sesion.close()
 
 def obtener_usuario_nombre(valor):
-    user_identificado = sesion.query(Usuario).filter(
-        Usuario.usuario.like(f'%{valor}%')).first()
-    if user_identificado != None and isinstance(user_identificado, Usuario):
-        return user_identificado
-
+    sesion = get_session()
+    try:
+        return sesion.query(Usuario).filter(Usuario.usuario.like(f"%{valor}%")).first()
+    finally:
+        sesion.close()
 
 def obtener_company_name(valor):
-    company_identificada = sesion.query(Company).filter(
-        Company.name.like(f'%{valor}%')).first()
-    if company_identificada != None and isinstance(company_identificada, Company):
-        return company_identificada
+    sesion = get_session()
+    try:
+        return sesion.query(Company).filter(Company.name.like(f"%{valor}%")).first()
+    finally:
+        sesion.close()

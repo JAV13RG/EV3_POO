@@ -35,8 +35,9 @@ def registrar_usuario():
                 nombre=ingreso_nombre,
                 usuario=ingreso_nombre_usuario,
                 email=ingreso_email,
-                contrasena_hash=hashed,
-                contrasena_salt=salt)
+                contrasena_hash=hashed.decode('utf-8'),
+                contrasena_salt=salt.decode('utf-8'),
+            )
 
             try:
                 id_usuario = insertar_objeto(nuevo_usuario)
@@ -56,11 +57,14 @@ def iniciar_sesion():
 
         usuario = obtener_usuario_nombre(ingreso_nombre_usuario)
         if usuario:
-            if bcrypt.checkpw(ingreso_contrasena.encode('utf-8'), usuario.contrasena_hash.encode('utf-8')):
+            if bcrypt.checkpw(
+                ingreso_contrasena.encode('utf-8'),
+                usuario.contrasena_hash.encode('utf-8')
+            ):
                 print('Acceso Concedido!')
                 return True
             else:
                 print('Contraseña Incorrecta, Intente nuevamente.')
-                return False
+                continue
         else:
             print('Usuario NO encontrado, regístrese para ingresar.')
