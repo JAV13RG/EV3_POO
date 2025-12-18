@@ -6,3 +6,5 @@ from .obtener_datos import (
     obtener_company_name,
     obtener_user_name
 )
+
+from .crud import actualizar_por_id, eliminar_por_id, obtener_por_id

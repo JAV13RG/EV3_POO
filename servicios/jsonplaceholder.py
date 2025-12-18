@@ -36,7 +36,7 @@ def post_user_api(json_user):
         respuesta = requests.post(url_users, json=json_user, timeout=10)
         if respuesta.status_code == 201:
             print("Solicitud correcta, User creado...")
-            print(respuesta.text)
+            return respuesta.json()
         else:
             print(
                 f"La solicitud falló con el siguiente código de error: {respuesta.status_code}")
@@ -44,11 +44,11 @@ def post_user_api(json_user):
         print(f"Error al realizar la solicitud: {e}")
         return None
 
-def put_user_api(id_user, json_user):
+def put_user_api(id_user: int, json_user: dict):
     try:
         url = f'{url_users}/{id_user}'
         respuesta = requests.put(url, json=json_user, timeout=10)
-        if respuesta.status_code == 200:
+        if respuesta.status_code in (200, 204):
             print("Solicitud correcta, User modificado...")
             print(respuesta.text)
         else:
@@ -58,7 +58,7 @@ def put_user_api(id_user, json_user):
         print(f"Error al realizar la solicitud: {e}")
         return None
 
-def delete_user_api(id_user):
+def delete_user_api(id_user: int):
     try:
         url = f'{url_users}/{id_user}'
         respuesta = requests.delete(url)

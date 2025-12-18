@@ -7,6 +7,7 @@ from negocio.negocio_geos import crear_geolocalizacion
 from negocio.negocio_addresses import crear_direccion
 from negocio.negocio_companies import crear_compania
 
+from datos import actualizar_por_id, eliminar_por_id
 
 def obtener_users_api():
     users = get_users_api()
@@ -58,7 +59,26 @@ def crear_user_api():
         'phone': phone,
         'website': website
     }
-    post_user_api(user)
+    creado = post_user_api(user)
+    if not creado:
+        print('Error al crear el usuario...')
+        return
+    
+    usuario = User(
+        name=creado.get('name', name),
+        username=creado.get('username', username),
+        email=creado.get('email', email),
+        phone=creado.get('phone', phone),
+        website=creado.get('website', website),
+        addressId=None,
+        companyId=None
+    )
+
+    try:
+        insertar_objeto(usuario)
+        print('Usuario creado en BD Local...')
+    except Exception as error:
+        print(f'Error al crear el usuario en BD Local: {error}')
 
 
 def modificar_user_api():
@@ -67,11 +87,15 @@ def modificar_user_api():
         id_user = int(id_user)
     except:
         print('Ingrese un número entero...')
+        return
+    
+
     name = input('Ingrese su nombre: ')
     username = input('Ingrese nombre usuario: ')
     email = input('Ingrese correo: ')
     phone = input('Ingrese celular: ')
     website = input('Ingrese página web: ')
+    
     user = {
         'name': name,
         'username': username,
@@ -79,8 +103,10 @@ def modificar_user_api():
         'phone': phone,
         'website': website
     }
+
     put_user_api(id_user, user)
 
+    actualizar_por_id(User, id_user, user)
 
 def eliminar_user_api():
     id_user = input('Ingrese ID usuario: ')
@@ -88,7 +114,10 @@ def eliminar_user_api():
         id_user = int(id_user)
     except:
         print('Ingrese un número entero...')
+        return
+    
     delete_user_api(id_user)
+    eliminar_por_id(User, id_user)
 
 
 def buscar_user_name_db(nombre):
@@ -109,6 +138,8 @@ def listado_usuarios_db():
             tabla_usuarios.add_row(
                 [usuario.id, usuario.name, usuario.username, usuario.email, usuario.phone, usuario.website])
         print(tabla_usuarios)
+    else:
+        print('No hay usuarios en la base de datos...')
 
 
 def crear_usuario_db(nombre, nombre_usuario, correo, telefono, sitio_web, id_direccion, id_compania):
